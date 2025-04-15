@@ -1,4 +1,6 @@
 ﻿using Autofac;
+using Business.Abstract;
+using Business.Concrete;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Context;
@@ -17,6 +19,8 @@ namespace Business.DependencyResolvers
             builder.RegisterType<EfUserDal>().As<IUserDal>();
 
             builder.RegisterType<AppDbContext>().AsSelf().InstancePerLifetimeScope();
+
+            builder.RegisterType<UserManager>().As<IUserService>();
         }
     }
     
