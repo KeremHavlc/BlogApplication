@@ -1,0 +1,23 @@
+﻿using Autofac;
+using DataAccess.Abstract;
+using DataAccess.Concrete;
+using DataAccess.Context;
+
+namespace Business.DependencyResolvers
+{
+    public class AutofacBusinessModule : Autofac.Module
+    {
+        protected override void Load(Autofac.ContainerBuilder builder)
+        {
+            builder.RegisterType<EfCommentDal>().As<ICommentDal>();
+            builder.RegisterType<EfFriendShipDal>().As<IFriendShipDal>();
+            builder.RegisterType<EfPostDal>().As<IPostDal>();
+            builder.RegisterType<EfPostLikeDal>().As<IPostLikeDal>();
+            builder.RegisterType<EfRoleDal>().As<IRoleDal>();
+            builder.RegisterType<EfUserDal>().As<IUserDal>();
+
+            builder.RegisterType<AppDbContext>().AsSelf().InstancePerLifetimeScope();
+        }
+    }
+    
+}

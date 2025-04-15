@@ -3,10 +3,6 @@
   "WorkspaceRootPath": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\DataAccess\\Migrations\\20250415133605_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:DataAccess\\Migrations\\20250415133605_InitialMigration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{A80CF972-4EE5-422F-B611-C4A2201533A4}|DataAccess\\DataAccess.csproj|c:\\users\\kerem\\desktop\\blog\\blogwebsite\\dataaccess\\context\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A80CF972-4EE5-422F-B611-C4A2201533A4}|DataAccess\\DataAccess.csproj|solutionrelative:dataaccess\\context\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -59,32 +55,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "20250415133605_InitialMigration.cs",
-              "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\DataAccess\\Migrations\\20250415133605_InitialMigration.cs",
-              "RelativeDocumentMoniker": "DataAccess\\Migrations\\20250415133605_InitialMigration.cs",
-              "ToolTip": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\DataAccess\\Migrations\\20250415133605_InitialMigration.cs",
-              "RelativeToolTip": "DataAccess\\Migrations\\20250415133605_InitialMigration.cs",
-              "ViewState": "AgIAAN4AAAAAAAAAAAAowOAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-15T13:36:05.76Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\DataAccess\\Context\\AppDbContext.cs",
               "RelativeDocumentMoniker": "DataAccess\\Context\\AppDbContext.cs",
               "ToolTip": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\DataAccess\\Context\\AppDbContext.cs",
               "RelativeToolTip": "DataAccess\\Context\\AppDbContext.cs",
-              "ViewState": "AgIAACwAAAAAAAAAAAAAwCYAAAA2AAAAAAAAAA==",
+              "ViewState": "AgIAADgAAAAAAAAAAAAAwFAAAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-15T13:22:19.12Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 4,
               "Title": "FriendShip.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\FriendShip.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\FriendShip.cs",
@@ -97,7 +80,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 7,
               "Title": "PostLike.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\PostLike.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\PostLike.cs",
@@ -110,7 +93,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "Comment.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\Comment.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\Comment.cs",
@@ -123,7 +106,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 6,
               "Title": "Post.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\Post.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\Post.cs",
@@ -136,7 +119,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 5,
               "Title": "Role.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\Role.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\Role.cs",
@@ -149,7 +132,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 2,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\User.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\User.cs",
@@ -162,7 +145,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "BaseEntity.cs",
               "DocumentMoniker": "C:\\Users\\Kerem\\Desktop\\Blog\\BlogWebSite\\Entity\\Concrete\\BaseEntity.cs",
               "RelativeDocumentMoniker": "Entity\\Concrete\\BaseEntity.cs",
