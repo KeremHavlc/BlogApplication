@@ -8,9 +8,11 @@ namespace Business.Concrete
     public class PostManager : IPostService
     {
         private readonly IPostDal _postDal;
-        public PostManager(IPostDal postdal)
+        private readonly IUserDal _userDal;
+        public PostManager(IPostDal postdal , IUserDal userDal)
         {
             _postDal = postdal;
+            _userDal = userDal;
         }
         public (bool success, string message) Add(PostDto postDto)
         {
@@ -36,22 +38,83 @@ namespace Business.Concrete
 
         public (bool success, string message) Delete(Guid id)
         {
-            throw new NotImplementedException();
+            if (id == Guid.Empty)
+            {
+                return (false, "Post Id Giriniz!");
+            }
+            var post = _postDal.Get(x => x.Id == id);
+            if(post is null)
+            {
+                return (false, "Post Bulunamadı!");
+            }
+            _postDal.Delete(post);
+            return (true, "Post Başarıyla silindi!");
         }
 
         public List<PostDto> GetAll()
         {
-            throw new NotImplementedException();
+            var posts = _postDal.GetAll();
+            if (posts is null)
+            {
+                return null;
+            }
+            var listposts = posts.Select(post => new PostDto
+            {                
+                Title = post.Title,
+                Description = post.Description,
+                Image = post.Image,
+                UserId = post.UserId
+            });
+            return listposts.ToList();
         }
 
-        public PostDto GetByUserId(Guid id)
+        public List<PostDto> GetByUserId(Guid id)
         {
-            throw new NotImplementedException();
+            var user = _userDal.Get(x => x.Id == id);
+            if(user is null)
+            {
+                return null;
+            }
+            var posts = _postDal.GetAll(x => x.UserId == id);
+            if(posts == null || !posts.Any())
+            {
+                return null;
+            }
+            var listposts = posts.Select(post => new PostDto
+            {
+                Title = post.Title,
+                Description = post.Description,
+                Image = post.Image,
+                UserId = post.UserId
+            }).ToList();
+            return listposts;
         }
 
         public (bool success, string message) Update(Guid id, PostDto postDto)
         {
-            throw new NotImplementedException();
+            var post = _postDal.Get(x => x.Id == id);
+            if(post is null)
+            {
+                return (false, "Post Bulunamadı!");
+            }
+            if (string.IsNullOrEmpty(postDto.Title))
+            {
+                return (false, "Başlık Giriniz!");
+            }
+            if (string.IsNullOrEmpty(postDto.Description))
+            {
+                return (false, "Açıklama Giriniz!");
+            }
+            if (post.UserId != postDto.UserId)
+            {
+                return (false, "Kullanıcı Id'si değiştirilemez!");
+            }
+            post.Title = postDto.Title;
+            post.Description = postDto.Description;
+            post.Image = postDto.Image;
+           
+            _postDal.Update(post);
+            return (true, "Post Güncelleme İşlemi Başarılı!");  
         }
     }
 }
