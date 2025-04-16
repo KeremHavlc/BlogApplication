@@ -56,16 +56,15 @@ namespace Business.Concrete
                 Password = registerDto.password,
                 RoleId = assignedRoleId
             };
-            try
-            {
-                _userService.Add(userDto);
-                return (true, "Kayıt İşlemi Başarılı!");
-            }
-            catch (Exception)
-            {
-
+           try
+           {
+                var result = _userService.Add(userDto);
+                return result; 
+           }
+           catch (Exception ex)
+           {
                 return (false, "Kayıt işleminde bir hata oluştu!");
-            }
+           }
         }
     }
 }
