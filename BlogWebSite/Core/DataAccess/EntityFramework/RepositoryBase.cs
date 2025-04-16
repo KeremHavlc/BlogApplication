@@ -26,7 +26,7 @@ namespace Core.DataAccess.EntityFramework
 
         public TEntity Get(System.Linq.Expressions.Expression<Func<TEntity, bool>> filter)
         {
-           return _context.Set<TEntity>().Find(filter);
+           return _context.Set<TEntity>().FirstOrDefault(filter);
         }
 
         public List<TEntity> GetAll(System.Linq.Expressions.Expression<Func<TEntity, bool>> filter = null)

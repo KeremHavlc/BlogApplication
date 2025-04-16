@@ -15,11 +15,41 @@ namespace WebApi.Controllers
             _userService = userService;
         }
 
-        [HttpPost]
-        public IActionResult AddUser(UserDto userDto)
+        [HttpPost("add")]
+        public IActionResult Add(UserDto userDto)
         {
-            _userService.Add(userDto);
-            return Ok();
+            var result = _userService.Add(userDto);
+            if (result.success)
+            {
+                return Ok(result.message);
+            }
+            return BadRequest(result.message);
+        }
+        [HttpDelete("delete/{email}")]
+        public IActionResult Delete(string email)
+        {
+            var result = _userService.Delete(email);
+            if (result.success)
+            {
+                return Ok(result.message);
+            }
+            return BadRequest(result.message);
+        }
+        [HttpPut("update")]
+        public IActionResult Update(Guid id , UserDto userDto)
+        {
+            var result = _userService.Update(id, userDto);
+            if (result.success)
+            {
+                return Ok(result.message);
+            }
+            return BadRequest(result.message);
+        }
+        [HttpGet("getAll")]
+        public IActionResult GetAll()
+        {
+            var result = _userService.GetAll();
+            return Ok(result);
         }
     }
 }

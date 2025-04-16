@@ -5,11 +5,11 @@ namespace Business.Abstract
 {
     public interface IUserService
     {
-        void Add(UserDto userDto);
-        void Delete(string email);
-        void Update(Guid id, User user);
+        (bool success , string message) Add(UserDto userDto);
+        (bool success , string message) Delete(string email);
+        (bool success , string message) Update(Guid id, UserDto userDto);
         User GetByEmail(string email);
-        List<User> GetAll();
+        List<UserDto> GetAll();
 
     }
 }

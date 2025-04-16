@@ -14,9 +14,21 @@ namespace Business.Concrete
         {
             _userDal = userDal;
         }
-
-        public void Add(UserDto userDto)
+        public (bool success, string message) Add(UserDto userDto)
         {
+            if(_userDal.Get(x=>x.Email == userDto.Email) != null)
+            {
+                return (false, "Bu Email Adresi Zaten Kayıtlı!");
+            }
+            if(_userDal.Get(x=>x.Username == userDto.Username) != null)
+            {
+                return (false, "Bu Kullanıcı Adi Zaten Kayıtlı!");
+            }
+            if(string.IsNullOrEmpty(userDto.Password) || userDto.Password.Length < 6)
+            {
+                return (false, "Geçerli bir Şifre Giriniz!");
+            }
+
             byte[] passwordHash, passwordSalt;
             HashingHelper.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
 
@@ -34,26 +46,69 @@ namespace Business.Concrete
             };
 
             _userDal.Add(user);
+            return (true, "Kullanıcı Ekleme İşlemi Başarılı!");
         }
 
-        public void Delete(string email)
+        public (bool success, string message) Delete(string email)
         {
-            throw new NotImplementedException();
+            if (string.IsNullOrEmpty(email))
+            {
+                return (false, "Email Adresi Giriniz!");
+            }
+            var user = _userDal.Get(x => x.Email == email);
+            if(user is null)
+            {
+                return (false, "Kullanıcı Bulunamadı!");
+            }
+            _userDal.Delete(user);
+            return (true, "Kullanıcı Silme İşlemi Başarılı!");
         }
 
-        public List<User> GetAll()
+        public List<UserDto> GetAll()
         {
-            throw new NotImplementedException();
+            var users = _userDal.GetAll();
+            var listUser = users.Select(user => new UserDto
+            {
+                Email = user.Email,
+                Username = user.Username,
+                RoleId = user.RoleId
+            }).ToList();
+            return listUser;
         }
 
         public User GetByEmail(string email)
         {
-            throw new NotImplementedException();
+            var user = _userDal.Get(x => x.Email == email);
+            if(user is null)
+            {
+                throw new KeyNotFoundException("Kullanıcı Bulunamadı!");
+            }
+            return user;
         }
 
-        public void Update(Guid id, User user)
+        public (bool success, string message) Update(Guid id, UserDto userDto)
         {
-            throw new NotImplementedException();
+            Guid defaultRoleId = new Guid("00000000-0000-0000-0000-000000000002");
+            Guid assignedRoleId = userDto.RoleId ?? defaultRoleId;
+
+            var existingUser = _userDal.Get(x => x.Id == id);
+            if(existingUser is null)
+            {
+                return (false, "Kullanıcı Bulunamadı!");
+            }
+            existingUser.Email = userDto.Email;
+            existingUser.Username = userDto.Username;
+            existingUser.RoleId = assignedRoleId;
+            if (!string.IsNullOrEmpty(userDto.Password))
+            {
+                byte[] passwordHash, passwordSalt;
+                HashingHelper.CreatePasswordHash(userDto.Password, out passwordHash, out passwordSalt);
+                existingUser.PasswordHash = passwordHash;
+                existingUser.PasswordSalt = passwordSalt;   
+            }
+            _userDal.Update(existingUser);
+            return (true, "Kullanıcı Güncelleme İşlemi Başarılı!");
+           
         }
     }
 }

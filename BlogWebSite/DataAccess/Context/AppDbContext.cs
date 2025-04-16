@@ -16,7 +16,7 @@ namespace DataAccess.Context
         public DbSet<FriendShip> FriendShips { get; set; }
         public DbSet<Role> Roles { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
+        {        
             // User → Post (Cascade)
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)
@@ -65,6 +65,14 @@ namespace DataAccess.Context
                 .WithMany(u => u.ReceivedFriendships)
                 .HasForeignKey(f => f.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordHash)
+                .HasColumnType("varbinary(max)");
+
+            modelBuilder.Entity<User>()
+                .Property(u => u.PasswordSalt)
+                .HasColumnType("varbinary(max)");
 
             base.OnModelCreating(modelBuilder);
 
