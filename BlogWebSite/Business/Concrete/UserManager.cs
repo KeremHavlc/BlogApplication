@@ -86,6 +86,16 @@ namespace Business.Concrete
             return user;
         }
 
+        public User GetByUsername(string username)
+        {
+            var user = _userDal.Get(x => x.Username == username);
+            if(user is null)
+            {
+                throw new KeyNotFoundException("Kullanıcı Bulunamadı!");
+            }
+            return user;
+        }
+
         public (bool success, string message) Update(Guid id, UserDto userDto)
         {
             Guid defaultRoleId = new Guid("00000000-0000-0000-0000-000000000002");

@@ -96,3 +96,4 @@ C:\Users\Kerem\Desktop\Blog\BlogWebSite\WebApi\bin\Debug\net9.0\Core.pdb
 C:\Users\Kerem\Desktop\Blog\BlogWebSite\WebApi\bin\Debug\net9.0\DataAccess.pdb
 C:\Users\Kerem\Desktop\Blog\BlogWebSite\WebApi\bin\Debug\net9.0\Entity.pdb
 C:\Users\Kerem\Desktop\Blog\BlogWebSite\WebApi\obj\Debug\net9.0\WebApi.sourcelink.json
+C:\Users\Kerem\Desktop\Blog\BlogWebSite\WebApi\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

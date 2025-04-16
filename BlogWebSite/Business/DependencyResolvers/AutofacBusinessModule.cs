@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Business.Abstract;
 using Business.Concrete;
+using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Context;
@@ -21,6 +22,10 @@ namespace Business.DependencyResolvers
             builder.RegisterType<AppDbContext>().AsSelf().InstancePerLifetimeScope();
 
             builder.RegisterType<UserManager>().As<IUserService>();
+
+            builder.RegisterType<AuthManager>().As<IAuthService>();
+
+            builder.RegisterType<TokenHandler>().As<ITokenHandler>();
         }
     }
     

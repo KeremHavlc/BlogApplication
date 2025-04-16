@@ -9,6 +9,7 @@ namespace Business.Abstract
         (bool success , string message) Delete(string email);
         (bool success , string message) Update(Guid id, UserDto userDto);
         User GetByEmail(string email);
+        User GetByUsername(string username);
         List<UserDto> GetAll();
 
     }
