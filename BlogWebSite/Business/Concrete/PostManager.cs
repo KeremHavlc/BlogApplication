@@ -14,7 +14,7 @@ namespace Business.Concrete
             _postDal = postdal;
             _userDal = userDal;
         }
-        public (bool success, string message) Add(PostDto postDto)
+        public (bool success, string message) Add(PostDto postDto, Guid userId)
         {
             if (string.IsNullOrEmpty(postDto.Title))
             {
@@ -30,23 +30,30 @@ namespace Business.Concrete
                 Title = postDto.Title,
                 Description = postDto.Description,
                 Image = postDto.Image,
-                UserId = postDto.UserId
+                UserId = userId
             };
             _postDal.Add(post);
             return (true, "Post Ekleme İşlemi Başarılı!");
         }
 
-        public (bool success, string message) Delete(Guid id)
+        public (bool success, string message) Delete(Guid id, Guid userId)
         {
             if (id == Guid.Empty)
             {
                 return (false, "Post Id Giriniz!");
             }
+
             var post = _postDal.Get(x => x.Id == id);
-            if(post is null)
+            if (post is null)
             {
                 return (false, "Post Bulunamadı!");
             }
+
+            if (post.UserId != userId)
+            {
+                return (false, "Bu post'u silme yetkiniz yok!");
+            }
+
             _postDal.Delete(post);
             return (true, "Post Başarıyla silindi!");
         }
@@ -62,8 +69,7 @@ namespace Business.Concrete
             {                
                 Title = post.Title,
                 Description = post.Description,
-                Image = post.Image,
-                UserId = post.UserId
+                Image = post.Image
             });
             return listposts.ToList();
         }
@@ -84,16 +90,19 @@ namespace Business.Concrete
             {
                 Title = post.Title,
                 Description = post.Description,
-                Image = post.Image,
-                UserId = post.UserId
+                Image = post.Image
             }).ToList();
             return listposts;
         }
 
-        public (bool success, string message) Update(Guid id, PostDto postDto)
+        public (bool success, string message) Update(Guid id, PostDto postDto , Guid userId)
         {
             var post = _postDal.Get(x => x.Id == id);
-            if(post is null)
+            if (post.UserId != userId)
+            {
+                return (false, "Postu Güncellemeye Yetkiniz Yok!");
+            }
+            if (post is null)
             {
                 return (false, "Post Bulunamadı!");
             }
@@ -104,10 +113,6 @@ namespace Business.Concrete
             if (string.IsNullOrEmpty(postDto.Description))
             {
                 return (false, "Açıklama Giriniz!");
-            }
-            if (post.UserId != postDto.UserId)
-            {
-                return (false, "Kullanıcı Id'si değiştirilemez!");
             }
             post.Title = postDto.Title;
             post.Description = postDto.Description;

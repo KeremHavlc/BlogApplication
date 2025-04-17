@@ -3,22 +3,23 @@ using Core.Dtos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
     [Authorize]
     [Route("api/[controller]")]
     [ApiController]
-    public class PostsController : ControllerBase
+    public class CommentsController : ControllerBase
     {
-        private readonly IPostService _postService;
-        public PostsController(IPostService postService)
+        private readonly ICommentService _commentService;
+        public CommentsController(ICommentService commentService)
         {
-            _postService = postService;
+            _commentService = commentService;
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] PostDto postDto)
+        public IActionResult Add([FromBody] CommentDto commentDto)
         {
             var userIdString = User.FindFirst("id")?.Value;
 
@@ -26,13 +27,15 @@ namespace WebApi.Controllers
             {
                 return Unauthorized("Geçersiz kullanıcı kimliği.");
             }
-            var result = _postService.Add(postDto , userId);
-            if (result.success)
-            {
-                return Ok(result.message);
-            }
-            return BadRequest(result.message);
+
+            var result = _commentService.Add(commentDto, userId);
+
+            if (!result.success)
+                return BadRequest(result.message);
+
+            return Ok(result.message);
         }
+
         [HttpDelete("delete/{id}")]
         public IActionResult Delete(Guid id)
         {
@@ -42,7 +45,7 @@ namespace WebApi.Controllers
             {
                 return Unauthorized("Geçersiz kullanıcı kimliği.");
             }
-            var result = _postService.Delete(id, userId);
+            var result = _commentService.Delete(id , userId);
             if (result.success)
             {
                 return Ok(result.message);
@@ -50,7 +53,7 @@ namespace WebApi.Controllers
             return BadRequest(result.message);
         }
         [HttpPut("update/{id}")]
-        public IActionResult Update(Guid id, [FromBody] PostDto postDto)
+        public IActionResult Update(Guid id, [FromBody] CommentDto commentDto)
         {
             var userIdString = User.FindFirst("id")?.Value;
 
@@ -58,7 +61,7 @@ namespace WebApi.Controllers
             {
                 return Unauthorized("Geçersiz kullanıcı kimliği.");
             }
-            var result = _postService.Update(id, postDto , userId);
+            var result = _commentService.Update(id, commentDto,userId);
             if (result.success)
             {
                 return Ok(result.message);
@@ -68,22 +71,32 @@ namespace WebApi.Controllers
         [HttpGet("getbyuserid/{id}")]
         public IActionResult GetByUserId(Guid id)
         {
-            var result = _postService.GetByUserId(id);
+            var result = _commentService.GetByUserId(id);
             if (result != null)
             {
                 return Ok(result);
             }
-            return NotFound("No posts found for this user.");
+            return NotFound("No comments found for this user.");
+        }
+        [HttpGet("getbypostid/{id}")]
+        public IActionResult GetById(Guid id)
+        {
+            var result = _commentService.GetByPostId(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("No comments found for this post.");
         }
         [HttpGet("getall")]
         public IActionResult GetAll()
         {
-            var result = _postService.GetAll();
+            var result = _commentService.GetAll();
             if (result != null)
             {
                 return Ok(result);
             }
-            return NotFound("No posts found.");
+            return NotFound("No comments found.");
         }
 
     }

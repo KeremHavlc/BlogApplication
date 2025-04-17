@@ -28,6 +28,8 @@ namespace Business.DependencyResolvers
             builder.RegisterType<TokenHandler>().As<ITokenHandler>();
 
             builder.RegisterType<PostManager>().As<IPostService>();
+
+            builder.RegisterType<CommentManager>().As<ICommentService>();
         }
     }
     
