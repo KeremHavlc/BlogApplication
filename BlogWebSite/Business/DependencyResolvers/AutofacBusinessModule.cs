@@ -30,6 +30,8 @@ namespace Business.DependencyResolvers
             builder.RegisterType<PostManager>().As<IPostService>();
 
             builder.RegisterType<CommentManager>().As<ICommentService>();
+
+            builder.RegisterType<PostLikeManager>().As<IPostLikeService>();
         }
     }
     
