@@ -66,16 +66,10 @@ namespace Business.Concrete
             {
                 return (false, "Kullanıcı Bulunamadı!");
             }
-            var existingLike = _postLikeDal.Get(x => x.PostId == postId && x.UserId == userId);
-            if (existingLike != null)
-            {
-                return (false, "Bu postu beğenmediniz!");
-            }
-                existingLike.IsActive = false;
-                existingLike.UpdatedAt = DateTime.Now;
-                _postLikeDal.Update(existingLike);
-                return (true, "Beğeni iptal edildi!");
-            }
+            var postLike = _postLikeDal.Get(x => x.PostId == post.Id);
+            _postLikeDal.Delete(postLike);
+            return (true, "Beğeni kaldırıldı!");
+        }
 
         public List<UserDto> GetAllPostLikeUser(Guid postId)
         { 

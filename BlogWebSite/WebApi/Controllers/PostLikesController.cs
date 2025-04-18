@@ -16,7 +16,7 @@ namespace WebApi.Controllers
             _postLikeService = postLikeService; 
         }
 
-        [HttpGet("addLike")]
+        [HttpPost("addLike")]
         public IActionResult AddLike(Guid postId)
         {
             var userIdString = User.FindFirst("id")?.Value;
