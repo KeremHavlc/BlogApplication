@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Dtos;
 using DataAccess.Abstract;
 using Entity.Concrete;
 
@@ -67,20 +68,60 @@ namespace Business.Concrete
             return (true, "Arkadaşlık isteği gönderildi!");
         }
 
-        public (bool success, string message) RejectFriendRequest(Guid senderUserId, Guid receiverUserId)
-        {
-            throw new NotImplementedException();
-        }
+        public List<UserDto> GetFriends(Guid userId)
+        {            
+            var friendships = _friendShipDal.GetAll(x =>
+                (x.SenderId == userId || x.ReceiverId == userId) &&
+                x.Status == true);
+         
+            var friendIds = friendships
+                .Select(x => x.SenderId == userId ? x.ReceiverId : x.SenderId)
+                .ToList();
+            //x.SenderId== userId ? true dönerse => userId isteği gönderen kişidir ve receiverId dönderilir.
+            //x.ReceiverId== userId ? true dönerse => userId isteği alan kişidir ve senderId dönderilir.
 
+            var users = _userDal.GetAll(x => friendIds.Contains(x.Id));
+
+            
+            var userDtos = users.Select(user => new UserDto
+            {
+                Username = user.Username,
+                Email = user.Email
+            }).ToList();
+
+            return userDtos;
+        }
         public (bool success, string message) RemoveFriend(Guid senderUserId, Guid receiverUserId)
         {
-           var friendShip = _friendShipDal.Get(x => x.SenderId == senderUserId && x.ReceiverId == receiverUserId);
+            var friendShip = _friendShipDal.Get(x =>
+                (x.SenderId == senderUserId && x.ReceiverId == receiverUserId) ||
+                (x.SenderId == receiverUserId && x.ReceiverId == senderUserId));
+
             if (friendShip == null)
             {
-                return (false, "Arkadaşlık isteği bulunamadı!");
+                return (false, "Böyle bir arkadaşlık ilişkisi bulunamadı!");
             }
+
             _friendShipDal.Delete(friendShip);
-            return (true, "Arkadaşlık isteği iptal edildi!");
+            return (true, "Arkadaşlık ilişkisi silindi!");
         }
+        public List<UserDto> GetPendingRequestSenders(Guid userId)
+        {
+            var pendingRequests = _friendShipDal.GetAll(x =>
+                x.ReceiverId == userId && x.Status == false);
+
+            var senderIds = pendingRequests.Select(x => x.SenderId).ToList();
+
+            var senders = _userDal.GetAll(x => senderIds.Contains(x.Id));
+
+            var result = senders.Select(x => new UserDto
+            {                
+                Username = x.Username,
+                Email = x.Email
+            }).ToList();
+
+            return result;
+        }
+
     }
 }

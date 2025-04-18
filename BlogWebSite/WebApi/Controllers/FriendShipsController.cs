@@ -32,14 +32,9 @@ namespace WebApi.Controllers
             return BadRequest(result.message);
         }
         [HttpDelete("removeFriend")]
-        public IActionResult RemoveFriend(Guid receiverUserId)
-        {
-            var userIdString = User.FindFirst("id")?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
-            var result = _friendShipService.RemoveFriend(userId, receiverUserId);
+        public IActionResult RemoveFriend(Guid receiverUserId , Guid senderUserId)
+        {            
+            var result = _friendShipService.RemoveFriend(receiverUserId, senderUserId);
             if (result.success)
             {
                 return Ok(result.message);
@@ -55,6 +50,37 @@ namespace WebApi.Controllers
                 return Ok(result.message);
             }
             return BadRequest(result.message);
+        }
+
+        [HttpGet("getFriends")]
+        public IActionResult GetFriends()
+        {
+            var userIdString = User.FindFirst("id")?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+            {
+                return Unauthorized("Geçersiz kullanıcı kimliği.");
+            }
+            var result = _friendShipService.GetFriends(userId);
+            if (result != null && result.Count > 0)
+            {
+                return Ok(result);
+            }
+            return NotFound("Arkadaş bulunamadı.");
+        }
+        [HttpGet("getPendingFriends")]
+        public IActionResult GetPendingFriends()
+        {
+            var userIdString = User.FindFirst("id")?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+            {
+                return Unauthorized("Geçersiz kullanıcı kimliği.");
+            }
+            var result = _friendShipService.GetFriends(userId);
+            if (result != null && result.Count > 0)
+            {
+                return Ok(result);
+            }
+            return NotFound("Arkadaş bulunamadı.");
         }
     }
 }
