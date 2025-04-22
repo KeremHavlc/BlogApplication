@@ -53,13 +53,8 @@ namespace WebApi.Controllers
         }
 
         [HttpGet("getFriends")]
-        public IActionResult GetFriends()
-        {
-            var userIdString = User.FindFirst("id")?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
+        public IActionResult GetFriends(Guid userId)
+        {          
             var result = _friendShipService.GetFriends(userId);
             if (result != null && result.Count > 0)
             {

@@ -1,4 +1,5 @@
 ﻿using Core.Dtos;
+using Entity.Concrete;
 
 namespace Business.Abstract
 {
@@ -8,6 +9,6 @@ namespace Business.Abstract
         (bool success, string message) Delete(Guid id , Guid userId);
         (bool success, string message) Update(Guid id, PostDto postDto , Guid userId);
         List<PostDto> GetByUserId(Guid id);
-        List<PostDto> GetAll();
+        List<Post> GetAll();
     }
 }

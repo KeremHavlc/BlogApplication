@@ -53,5 +53,25 @@ namespace WebApi.Controllers
             var result = _userService.GetAll();
             return Ok(result);
         }
+        [HttpGet("getByUsername")]
+        public IActionResult GetByUsername(string username)
+        {
+            var result = _userService.GetByUsername(username);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Kullanıcı Bulunamadı!");
+        }
+        [HttpGet("getById")]
+        public IActionResult GetById(Guid id)
+        {
+            var result = _userService.GetById(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Kullanıcı Bulunamadı!");
+        }
     }
 }

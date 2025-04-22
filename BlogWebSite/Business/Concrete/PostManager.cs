@@ -58,20 +58,14 @@ namespace Business.Concrete
             return (true, "Post Başarıyla silindi!");
         }
 
-        public List<PostDto> GetAll()
+        public List<Post> GetAll()
         {
             var posts = _postDal.GetAll();
             if (posts is null)
             {
                 return null;
-            }
-            var listposts = posts.Select(post => new PostDto
-            {                
-                Title = post.Title,
-                Description = post.Description,
-                Image = post.Image
-            });
-            return listposts.ToList();
+            }         
+            return posts;
         }
 
         public List<PostDto> GetByUserId(Guid id)
