@@ -9,6 +9,8 @@ namespace Core.Dtos
     public class CommentDto
     {
         public string Message { get; set; }
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public Guid UserId { get; set; }
         public Guid PostId { get; set; }
     }
 }

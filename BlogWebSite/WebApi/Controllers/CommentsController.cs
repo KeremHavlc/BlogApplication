@@ -19,15 +19,8 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("add")]
-        public IActionResult Add([FromBody] CommentDto commentDto)
-        {
-            var userIdString = User.FindFirst("id")?.Value;
-
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
-
+        public IActionResult Add([FromBody] CommentDto commentDto , Guid userId)
+        {            
             var result = _commentService.Add(commentDto, userId);
 
             if (!result.success)

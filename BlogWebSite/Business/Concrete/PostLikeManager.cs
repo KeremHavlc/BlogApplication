@@ -91,5 +91,11 @@ namespace Business.Concrete
 
             return users;
         }
+
+        public bool IsPostLikedByUser(Guid postId, Guid userId)
+        {
+            var like = _postLikeDal.Get(x => x.PostId == postId && x.UserId == userId && x.IsActive);
+            return like != null;
+        }
     }
 }

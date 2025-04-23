@@ -27,7 +27,8 @@ namespace Business.Concrete
             {
                 Message = commentDto.Message,
                 PostId = commentDto.PostId,
-                UserId = userId
+                UserId = commentDto.UserId,
+                CreatedAt = DateTime.Now,
             };
             _commentDal.Add(comment);
             return (true, "Yorum Başarılı bir şekilde kayıt edildi!");
@@ -62,7 +63,9 @@ namespace Business.Concrete
             var commentsDto = comments.Select(comment => new CommentDto
             {
                 Message = comment.Message,
-                PostId = comment.PostId
+                PostId = comment.PostId,
+                UserId = comment.UserId,
+                CreatedAt = comment.CreatedAt
             }).ToList();
             return commentsDto;
         }
@@ -77,7 +80,9 @@ namespace Business.Concrete
             var commentsDto = comments.Select(comment => new CommentDto
             {
                 Message = comment.Message,
-                PostId = comment.PostId
+                PostId = comment.PostId,
+                UserId = comment.UserId,
+                CreatedAt = comment.CreatedAt
             }).ToList();
             return commentsDto;
         }
@@ -92,7 +97,9 @@ namespace Business.Concrete
             var commentsDto = comments.Select(comment => new CommentDto
             {
                 Message = comment.Message,
-                PostId = comment.PostId
+                PostId = comment.PostId,
+                UserId = comment.UserId,
+                CreatedAt = comment.CreatedAt
             }).ToList();
             return commentsDto;
         }

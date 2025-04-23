@@ -63,5 +63,17 @@ namespace WebApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("isLiked")]
+        public IActionResult IsPostLikedByCurrentUser(Guid postId)
+        {
+            var userIdString = User.FindFirst("id")?.Value;
+            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
+            {
+                return Unauthorized("Geçersiz kullanıcı kimliği.");
+            }
+
+            var isLiked = _postLikeService.IsPostLikedByUser(postId, userId);
+            return Ok(isLiked); 
+        }
     }
 }

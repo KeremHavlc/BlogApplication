@@ -16,17 +16,11 @@ namespace WebApi.Controllers
         {
             _postService = postService;
         }
-
         [HttpPost("add")]
-        public IActionResult Add([FromBody] PostDto postDto)
-        {
-            var userIdString = User.FindFirst("id")?.Value;
+        public IActionResult Add([FromBody] PostDto postDto,Guid userId)
+        {            
+            var result = _postService.Add(postDto, userId);
 
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
-            var result = _postService.Add(postDto , userId);
             if (result.success)
             {
                 return Ok(result.message);
@@ -84,6 +78,14 @@ namespace WebApi.Controllers
                 return Ok(result);
             }
             return NotFound("No posts found.");
+        }
+        [HttpGet("getBypostId")]
+        public IActionResult GetById(Guid postId)
+        {
+            var post = _postService.GetByPostId(postId);
+            if (post == null)
+                return NotFound();
+            return Ok(post);
         }
 
     }
