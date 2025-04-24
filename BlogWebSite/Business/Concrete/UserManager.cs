@@ -71,7 +71,8 @@ namespace Business.Concrete
             {
                 Email = user.Email,
                 Username = user.Username,
-                RoleId = user.RoleId
+                RoleId = user.RoleId,
+                UserId = user.Id
             }).ToList();
             return listUser;
         }

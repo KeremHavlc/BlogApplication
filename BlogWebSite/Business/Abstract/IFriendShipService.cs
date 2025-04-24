@@ -10,6 +10,7 @@ namespace Business.Abstract
         (bool success, string message) AcceptFriendRequest(Guid senderUserId, Guid receiverUserId);
         List<UserDto> GetFriends(Guid userId);
         List<UserDto> GetPendingRequestSenders(Guid userId);
+        bool? Check(Guid senderUserId, Guid receiverUserId);
     }
 }
 

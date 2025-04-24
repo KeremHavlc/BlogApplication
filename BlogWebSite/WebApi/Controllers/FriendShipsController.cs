@@ -15,16 +15,9 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("addFriend")]
-        public IActionResult AddFriend(Guid receiverUserId)
+        public IActionResult AddFriend(Guid receiverUserId,Guid senderUserId)
         {
-
-            var userIdString = User.FindFirst("id")?.Value;
-
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
-            var result = _friendShipService.AddFriend(userId, receiverUserId);
+            var result = _friendShipService.AddFriend(senderUserId, receiverUserId);
             if (result.success)
             {
                 return Ok(result.message);
@@ -76,6 +69,12 @@ namespace WebApi.Controllers
                 return Ok(result);
             }
             return NotFound("Arkadaş bulunamadı.");
+        }
+        [HttpGet("check")]
+        public IActionResult Check(Guid senderUserId , Guid receiverUserId)
+        {
+            var result = _friendShipService.Check(senderUserId, receiverUserId);
+            return Ok(result);
         }
     }
 }

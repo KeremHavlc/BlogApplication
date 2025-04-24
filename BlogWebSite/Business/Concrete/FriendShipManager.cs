@@ -123,5 +123,18 @@ namespace Business.Concrete
             return result;
         }
 
+        public bool? Check(Guid senderUserId, Guid receiverUserId)
+        {
+            var friendShip = _friendShipDal.Get(f => (f.SenderId == senderUserId && f.ReceiverId == receiverUserId)
+                                                    || (f.SenderId == receiverUserId && f.ReceiverId == senderUserId));
+
+            if (friendShip == null)
+            {
+                return null;
+            }
+
+            return friendShip.Status;
+        }
+
     }
 }

@@ -27,7 +27,7 @@ namespace Business.Concrete
             {
                 Message = commentDto.Message,
                 PostId = commentDto.PostId,
-                UserId = commentDto.UserId,
+                UserId = userId,
                 CreatedAt = DateTime.Now,
             };
             _commentDal.Add(comment);
@@ -98,7 +98,7 @@ namespace Business.Concrete
             {
                 Message = comment.Message,
                 PostId = comment.PostId,
-                UserId = comment.UserId,
+                UserId = id,
                 CreatedAt = comment.CreatedAt
             }).ToList();
             return commentsDto;
