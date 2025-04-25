@@ -86,7 +86,8 @@ namespace Business.Concrete
             var userDtos = users.Select(user => new UserDto
             {
                 Username = user.Username,
-                Email = user.Email
+                Email = user.Email,
+                UserId = user.Id
             }).ToList();
 
             return userDtos;
@@ -105,35 +106,50 @@ namespace Business.Concrete
             _friendShipDal.Delete(friendShip);
             return (true, "Arkadaşlık ilişkisi silindi!");
         }
-        public List<UserDto> GetPendingRequestSenders(Guid userId)
+        public FriendShipsStatusDto Check(Guid senderUserId, Guid receiverUserId)
         {
-            var pendingRequests = _friendShipDal.GetAll(x =>
-                x.ReceiverId == userId && x.Status == false);
-
-            var senderIds = pendingRequests.Select(x => x.SenderId).ToList();
-
-            var senders = _userDal.GetAll(x => senderIds.Contains(x.Id));
-
-            var result = senders.Select(x => new UserDto
-            {                
-                Username = x.Username,
-                Email = x.Email
-            }).ToList();
-
-            return result;
-        }
-
-        public bool? Check(Guid senderUserId, Guid receiverUserId)
-        {
-            var friendShip = _friendShipDal.Get(f => (f.SenderId == senderUserId && f.ReceiverId == receiverUserId)
-                                                    || (f.SenderId == receiverUserId && f.ReceiverId == senderUserId));
+            var friendShip = _friendShipDal.Get(f =>
+                (f.SenderId == senderUserId && f.ReceiverId == receiverUserId)
+                || (f.SenderId == receiverUserId && f.ReceiverId == senderUserId));
 
             if (friendShip == null)
+                return new FriendShipsStatusDto { Status = 0, Message = "Arkadaşlık ilişkisi yok" };
+
+            if (friendShip.Status == false)
+                return new FriendShipsStatusDto { Status = 1, Message = "Arkadaşlık isteği bekleniyor" };
+
+            return new FriendShipsStatusDto { Status = 2, Message = "Arkadaşsınız" };
+        }
+
+        public List<FriendShipsStatusDto> GetPendingRequestSenders(Guid userId)
+        {
+            // Kullanıcıya gelen TÜM BEKLEYEN istekleri al (Status = false)
+            var pendingRequests = _friendShipDal.GetAll(x =>
+                x.ReceiverId == userId &&
+                x.Status == false
+            );
+
+            // Her istek için gönderenin detaylarını DTO'ya ekle
+            var result = new List<FriendShipsStatusDto>();
+
+            foreach (var request in pendingRequests)
             {
-                return null;
+                var senderUser = _userDal.Get(x => x.Id == request.SenderId);
+
+                if (senderUser != null)
+                {
+                    result.Add(new FriendShipsStatusDto
+                    {
+                        Status = 1, // Bekleyen istek
+                        Message = "Arkadaşlık isteği bekleniyor",
+                        UserId = senderUser.Id,
+                        Username = senderUser.Username,
+                        Email = senderUser.Email
+                    });
+                }
             }
 
-            return friendShip.Status;
+            return result;
         }
 
     }

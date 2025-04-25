@@ -1,4 +1,5 @@
 ﻿using Business.Abstract;
+using Core.Dtos;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -56,14 +57,9 @@ namespace WebApi.Controllers
             return NotFound("Arkadaş bulunamadı.");
         }
         [HttpGet("getPendingFriends")]
-        public IActionResult GetPendingFriends()
+        public IActionResult GetPendingFriends(Guid userId)
         {
-            var userIdString = User.FindFirst("id")?.Value;
-            if (string.IsNullOrEmpty(userIdString) || !Guid.TryParse(userIdString, out Guid userId))
-            {
-                return Unauthorized("Geçersiz kullanıcı kimliği.");
-            }
-            var result = _friendShipService.GetFriends(userId);
+            var result = _friendShipService.GetPendingRequestSenders(userId);
             if (result != null && result.Count > 0)
             {
                 return Ok(result);
@@ -71,7 +67,7 @@ namespace WebApi.Controllers
             return NotFound("Arkadaş bulunamadı.");
         }
         [HttpGet("check")]
-        public IActionResult Check(Guid senderUserId , Guid receiverUserId)
+        public ActionResult<FriendShipsStatusDto> Check(Guid senderUserId, Guid receiverUserId)
         {
             var result = _friendShipService.Check(senderUserId, receiverUserId);
             return Ok(result);
