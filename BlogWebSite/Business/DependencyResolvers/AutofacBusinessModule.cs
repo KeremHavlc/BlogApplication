@@ -38,8 +38,12 @@ namespace Business.DependencyResolvers
             builder.RegisterType<PostLikeManager>().As<IPostLikeService>();
 
             builder.RegisterType<FriendShipManager>().As<IFriendShipService>();
+
             builder.RegisterType<CommunityManager>().As<ICommunityService>();
+
             builder.RegisterType<CommunityPostManager>().As<ICommunityPostService>();
+
+            builder.RegisterType<CommunityCommentManager>().As<ICommunityCommentService>();
         }
     }
     
