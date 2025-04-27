@@ -44,6 +44,8 @@ namespace Business.DependencyResolvers
             builder.RegisterType<CommunityPostManager>().As<ICommunityPostService>();
 
             builder.RegisterType<CommunityCommentManager>().As<ICommunityCommentService>();
+
+            builder.RegisterType<CommunityUserManager>().As<ICommunityUserService>();
         }
     }
     
