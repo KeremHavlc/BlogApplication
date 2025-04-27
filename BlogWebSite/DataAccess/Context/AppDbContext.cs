@@ -18,9 +18,24 @@ namespace DataAccess.Context
         public DbSet<Community> Communities { get; set; }
         public DbSet<CommunityPost> CommunityPosts { get; set; }
         public DbSet<CommunityComment> CommunityComments { get; set; }
+        public DbSet<CommunityUser> CommunityUsers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<CommunityUser>()
+                .HasKey(cu => new { cu.CommunityId, cu.UserId }); 
+
+            modelBuilder.Entity<CommunityUser>()
+                .HasOne(cu => cu.Community)
+                .WithMany(c => c.CommunityUsers)
+                .HasForeignKey(cu => cu.CommunityId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CommunityUser>()
+                .HasOne(cu => cu.User)
+                .WithMany(u => u.CommunityUsers)
+                .HasForeignKey(cu => cu.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
             // User → Post (Cascade)
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)

@@ -5,9 +5,9 @@ using Entity.Concrete;
 
 namespace DataAccess.Concrete
 {
-    public class EfCommunityDal : RepositoryBase<Community, AppDbContext>, ICommunityDal
+    public class EfCommunityUserDal : RepositoryBase<CommunityUser, AppDbContext>, ICommunityUserDal
     {
-        public EfCommunityDal(AppDbContext context) : base(context)
+        public EfCommunityUserDal(AppDbContext context) : base(context)
         {
         }
     }

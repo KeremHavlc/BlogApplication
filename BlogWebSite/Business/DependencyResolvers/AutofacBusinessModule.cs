@@ -18,6 +18,10 @@ namespace Business.DependencyResolvers
             builder.RegisterType<EfPostLikeDal>().As<IPostLikeDal>();
             builder.RegisterType<EfRoleDal>().As<IRoleDal>();
             builder.RegisterType<EfUserDal>().As<IUserDal>();
+            builder.RegisterType<EfCommunityDal>().As<ICommunityDal>();
+            builder.RegisterType<EfCommunityCommentDal>().As<ICommunityCommentDal>();
+            builder.RegisterType<EfCommunityPostDal>().As<ICommunityPostDal>();
+            builder.RegisterType<EfCommunityUserDal>().As<ICommunityUserDal>();
 
             builder.RegisterType<AppDbContext>().AsSelf().InstancePerLifetimeScope();
 
@@ -34,6 +38,8 @@ namespace Business.DependencyResolvers
             builder.RegisterType<PostLikeManager>().As<IPostLikeService>();
 
             builder.RegisterType<FriendShipManager>().As<IFriendShipService>();
+            builder.RegisterType<CommunityManager>().As<ICommunityService>();
+            builder.RegisterType<CommunityPostManager>().As<ICommunityPostService>();
         }
     }
     
