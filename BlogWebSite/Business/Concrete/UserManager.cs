@@ -97,14 +97,37 @@ namespace Business.Concrete
             return user;
         }
 
-        public User GetByUsername(string username)
+        public UserDto GetByIdFront(Guid id)
+        {
+            var user = _userDal.Get(x => x.Id == id);
+            if (user is null)
+            {
+                return null;
+            }
+            UserDto userDto = new UserDto
+            {
+                Email = user.Email,
+                Username = user.Username,
+                RoleId = user.RoleId,
+                UserId = user.Id
+            };
+            return userDto;
+        }
+
+        public User? GetByUsername(string username)
         {
             var user = _userDal.Get(x => x.Username == username);
             if(user is null)
             {
-                throw new KeyNotFoundException("Kullanıcı Bulunamadı!");
+                return null;
             }
             return user;
+        }
+
+        public List<User> GetByUsernameFront(string username)
+        {        
+            var users = _userDal.GetAll(x => x.Username.Contains(username));
+            return users ?? new List<User>();        
         }
 
         public (bool success, string message) Update(Guid id, UserDto userDto)

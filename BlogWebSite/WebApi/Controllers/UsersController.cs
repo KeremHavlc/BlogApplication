@@ -38,7 +38,7 @@ namespace WebApi.Controllers
             return BadRequest(result.message);
         }
         [HttpPut("update")]
-        public IActionResult Update(Guid id , UserDto userDto)
+        public IActionResult Update(Guid id, UserDto userDto)
         {
             var result = _userService.Update(id, userDto);
             if (result.success)
@@ -63,10 +63,30 @@ namespace WebApi.Controllers
             }
             return NotFound("Kullanıcı Bulunamadı!");
         }
+        [HttpGet("getByUsernameFront")]
+        public IActionResult GetByUsernameFront(string username)
+        {
+            var result = _userService.GetByUsernameFront(username);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Kullanıcı Bulunamadı!");
+        }
         [HttpGet("getById")]
         public IActionResult GetById(Guid id)
         {
             var result = _userService.GetById(id);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Kullanıcı Bulunamadı!");
+        }
+        [HttpGet("getByIdFront")]
+        public IActionResult GetByIdFront(Guid id)
+        {
+            var result = _userService.GetByIdFront(id);
             if (result != null)
             {
                 return Ok(result);
