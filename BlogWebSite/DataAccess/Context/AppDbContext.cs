@@ -15,8 +15,12 @@ namespace DataAccess.Context
         public DbSet<PostLike> PostLikes { get; set; }
         public DbSet<FriendShip> FriendShips { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Community> Communities { get; set; }
+        public DbSet<CommunityPost> CommunityPosts { get; set; }
+        public DbSet<CommunityComment> CommunityComments { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {        
+        {
             // User → Post (Cascade)
             modelBuilder.Entity<Post>()
                 .HasOne(p => p.User)
@@ -24,19 +28,19 @@ namespace DataAccess.Context
                 .HasForeignKey(p => p.UserId)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            // User → Comment (Cascade)
+            // User → Comment (Restrict - Daha güvenli)
             modelBuilder.Entity<Comment>()
                 .HasOne(c => c.User)
                 .WithMany(u => u.Comments)
                 .HasForeignKey(c => c.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);  // Kullanıcı silindiğinde yorumlar silinmesin.
 
-            // User → PostLike (Cascade)
+            // User → PostLike (Restrict - Daha güvenli)
             modelBuilder.Entity<PostLike>()
                 .HasOne(l => l.User)
                 .WithMany(u => u.Likes)
                 .HasForeignKey(l => l.UserId)
-                .OnDelete(DeleteBehavior.ClientCascade);
+                .OnDelete(DeleteBehavior.Restrict);  // Kullanıcı silindiğinde beğeniler silinmesin.
 
             // Post → Comment (Cascade)
             modelBuilder.Entity<Comment>()
@@ -66,6 +70,20 @@ namespace DataAccess.Context
                 .HasForeignKey(f => f.ReceiverId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+            // CommunityComment → CommunityPost (Cascade)
+            modelBuilder.Entity<CommunityComment>()
+                .HasOne(cc => cc.CommunityPost)
+                .WithMany(cp => cp.CommunityComments)
+                .HasForeignKey(cc => cc.CommunityPostId)
+                .OnDelete(DeleteBehavior.Cascade);  // Post silindiğinde comment'lar silinsin.
+
+            // CommunityComment → User (Restrict)
+            modelBuilder.Entity<CommunityComment>()
+                .HasOne(cc => cc.User)
+                .WithMany(u => u.CommunityComments)
+                .HasForeignKey(cc => cc.UserId)
+                .OnDelete(DeleteBehavior.Restrict);  // Kullanıcı silindiğinde yorumlar silinmesin.
+
             modelBuilder.Entity<User>()
                 .Property(u => u.PasswordHash)
                 .HasColumnType("varbinary(max)");
@@ -75,18 +93,19 @@ namespace DataAccess.Context
                 .HasColumnType("varbinary(max)");
 
             base.OnModelCreating(modelBuilder);
+        
 
-            //Cascade / Resctrict / ClientCascade
-            
-            //Cascade: Silinen verinin bağlı olduğu verileri de siler.
-            
-            //Restrict: Silinen verinin bağlı olduğu verileri silmez, hata verir.
-            
-            //ClientCascade: Silinen verinin bağlı olduğu verileri siler, ancak veritabanında hata verir.
-            //Bu durumda, veritabanı işlemi başarısız olur, ancak uygulama tarafında işlem devam eder.
-            //(Uygulama Tarafında dediği kısım EfCore bu işi halleder.)
-            //Bu nedenle, bu tür bir silme işlemi genellikle önerilmez ve dikkatli kullanılmalıdır.
-        }
+        //Cascade / Resctrict / ClientCascade
+
+        //Cascade: Silinen verinin bağlı olduğu verileri de siler.
+
+        //Restrict: Silinen verinin bağlı olduğu verileri silmez, hata verir.
+
+        //ClientCascade: Silinen verinin bağlı olduğu verileri siler, ancak veritabanında hata verir.
+        //Bu durumda, veritabanı işlemi başarısız olur, ancak uygulama tarafında işlem devam eder.
+        //(Uygulama Tarafında dediği kısım EfCore bu işi halleder.)
+        //Bu nedenle, bu tür bir silme işlemi genellikle önerilmez ve dikkatli kullanılmalıdır.
+    }
     }
     
 }

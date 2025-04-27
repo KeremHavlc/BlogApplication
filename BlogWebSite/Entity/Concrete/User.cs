@@ -23,5 +23,8 @@ namespace Entity.Concrete
 
         public ICollection<FriendShip> SentFriendships { get; set; }
         public ICollection<FriendShip> ReceivedFriendships { get; set; }
+        public ICollection<CommunityPost> CommunityPosts { get; set; }
+        public ICollection<CommunityComment> CommunityComments { get; set; }
+
     }
 }
