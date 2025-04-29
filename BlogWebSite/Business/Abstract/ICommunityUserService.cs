@@ -8,5 +8,8 @@ namespace Business.Abstract
         (bool success, string message) DeleteCommunityUser(CommunityUserDto communityUserDto);
         int GetCommunityUserCount(Guid communityId);
         List<CommunityUserDto> GetCommunityUsersByCommunityId(Guid communityId);
+        Dictionary<Guid, int> GetAllCommunityUserCount();
+        CommunityUsersCheckDto Check(Guid communityId, Guid joinUserId);
+
     }
 }

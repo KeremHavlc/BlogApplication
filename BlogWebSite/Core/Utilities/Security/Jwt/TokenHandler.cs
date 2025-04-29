@@ -48,7 +48,7 @@ namespace Core.Utilities.Security.Jwt
            {
                 new Claim("id", id.ToString()),
                 new Claim("username", username),
-                new Claim(ClaimTypes.Role, roleId),
+                new Claim("roleId", roleId),
            };
             return claims;
         }

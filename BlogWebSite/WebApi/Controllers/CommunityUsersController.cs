@@ -53,5 +53,17 @@ namespace WebApi.Controllers
             }
             return Ok(result);
         }
+        [HttpGet("getAllCommunityUsersCount")]
+        public IActionResult GetAllCommunityUsersCount()
+        {
+            var result = _communityUserService.GetAllCommunityUserCount();
+            return Ok(result);
+        }
+        [HttpGet("check")]  
+        public IActionResult Check(Guid communityId, Guid joinUserId)
+        {
+            var result = _communityUserService.Check(communityId, joinUserId);
+            return Ok(result);
+        }
     }
 }

@@ -15,13 +15,18 @@ namespace Business.Concrete
 
         public (bool success, string message) AddCommunityUser(CommunityUserDto communityUserDto)
         {
-            if(communityUserDto.CommunityId == Guid.Empty)
+            if (communityUserDto.CommunityId == Guid.Empty)
             {
-                return (false, "Toplululk boş olamaz!");
+                return (false, "Topluluk boş olamaz!");
             }
             if (communityUserDto.UserId == Guid.Empty)
             {
                 return (false, "Kullanıcı boş olamaz!");
+            }
+            var existingCommunityUser = _communityUserDal.Get(x => x.CommunityId == communityUserDto.CommunityId && x.UserId == communityUserDto.UserId);
+            if (existingCommunityUser != null)
+            {
+                return (false, "Bu kullanıcı zaten bu topluluğa eklenmiş.");
             }
 
             var communityUser = new CommunityUser
@@ -34,6 +39,26 @@ namespace Business.Concrete
             return (true, "Topluluk kullanıcısı başarıyla eklendi.");
         }
 
+        public CommunityUsersCheckDto Check(Guid communityId, Guid joinUserId)
+        {
+            var communityUser = _communityUserDal.Get(x => x.CommunityId == communityId && x.UserId == joinUserId);
+            if (communityUser == null)
+            {
+                return new CommunityUsersCheckDto
+                {
+                    Status = 0,
+                    Message = "Kullanıcı toplulukta değil.",
+                    UserId = joinUserId,
+                };
+            }
+            return new CommunityUsersCheckDto
+            {
+                Status = 1,
+                Message = "Kullanıcı toplulukta.",
+                UserId = joinUserId,
+            };
+        }
+
         public (bool success, string message) DeleteCommunityUser(CommunityUserDto communityUserDto)
         {
             var communityUser = _communityUserDal.Get(x => x.CommunityId == communityUserDto.CommunityId && x.UserId == communityUserDto.UserId);
@@ -43,6 +68,22 @@ namespace Business.Concrete
             }
             _communityUserDal.Delete(communityUser);
             return (true, "Topluluk kullanıcısı başarıyla silindi.");
+        }
+
+        public Dictionary<Guid, int> GetAllCommunityUserCount()
+        {
+           
+            var communityUserCount = new Dictionary<Guid, int>();
+
+            var communityUsers = _communityUserDal.GetAll(); 
+            var groupedByCommunity = communityUsers.GroupBy(x => x.CommunityId); 
+
+            foreach (var group in groupedByCommunity)
+            {
+                communityUserCount[group.Key] = group.Count(); 
+            }
+
+            return communityUserCount;
         }
 
         public int GetCommunityUserCount(Guid communityId)

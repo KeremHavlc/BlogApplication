@@ -57,6 +57,7 @@ namespace Business.Concrete
             }
             var listCommunity = community.Select(c => new CommunityDto
             {
+                CommunityId = c.Id,
                 Name = c.Name,
                 Description = c.Description,
                 Image = c.Image,
@@ -74,6 +75,7 @@ namespace Business.Concrete
             }
             var communityDto = new CommunityDto
             {
+                CommunityId = communit.Id,
                 Name = communit.Name,
                 Description = communit.Description,
                 Image = communit.Image,
@@ -101,6 +103,7 @@ namespace Business.Concrete
             {
                 return (false, "Topluluk resmi boş olamaz!");
             }
+            community.Id = communityId;
             community.Name = communityDto.Name;
             community.Description = communityDto.Description;
             community.Image = communityDto.Image;

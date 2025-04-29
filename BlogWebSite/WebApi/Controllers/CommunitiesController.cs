@@ -1,5 +1,6 @@
 ﻿using Business.Abstract;
 using Core.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,6 +18,11 @@ namespace WebApi.Controllers
         [HttpPost("addCommunity")]
         public IActionResult AddCommunity(CommunityDto communityDto)
         {
+            var roleIdClaim = User.FindFirst("roleId")?.Value;
+            if (roleIdClaim != "3fa85f64-5717-4562-b3fc-2c963f66afa5")
+            {
+                return Forbid();
+            }
             var result = _communityService.Add(communityDto);
             if (result.success)
             {
@@ -28,8 +34,14 @@ namespace WebApi.Controllers
             }
         }
         [HttpPut("updateCommunity")]
+
         public IActionResult UpdateCommunity(CommunityDto communityDto, Guid communityId)
         {
+            var roleIdClaim = User.FindFirst("roleId")?.Value;
+            if (roleIdClaim != "3fa85f64-5717-4562-b3fc-2c963f66afa5")
+            {
+                return Forbid(); // Admin değilse 403
+            }
             var result = _communityService.Update(communityDto, communityId);
             if (result.success)
             {
@@ -41,8 +53,14 @@ namespace WebApi.Controllers
             }
         }
         [HttpDelete("deleteCommunity")]
+
         public IActionResult DeleteCommunity(Guid id)
         {
+            var roleIdClaim = User.FindFirst("roleId")?.Value;
+            if (roleIdClaim != "3fa85f64-5717-4562-b3fc-2c963f66afa5")
+            {
+                return Forbid(); // Admin değilse 403
+            }
             var result = _communityService.Delete(id);
             if (result.success)
             {
