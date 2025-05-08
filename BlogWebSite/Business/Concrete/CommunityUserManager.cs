@@ -1,6 +1,7 @@
 ﻿using Business.Abstract;
 using Core.Dtos;
 using DataAccess.Abstract;
+using DataAccess.Concrete;
 using Entity.Concrete;
 
 namespace Business.Concrete
@@ -8,9 +9,11 @@ namespace Business.Concrete
     public class CommunityUserManager : ICommunityUserService
     {
         private readonly ICommunityUserDal _communityUserDal;
-        public CommunityUserManager(ICommunityUserDal communityUserDal)
+        private readonly ICommunityDal _communityDal;
+        public CommunityUserManager(ICommunityUserDal communityUserDal, ICommunityDal communityDal)
         {
             _communityUserDal = communityUserDal;
+            _communityDal = communityDal;
         }
 
         public (bool success, string message) AddCommunityUser(CommunityUserDto communityUserDto)
@@ -84,6 +87,30 @@ namespace Business.Concrete
             }
 
             return communityUserCount;
+        }
+
+        public List<CommunityDto> GetCommunitiesByUserId(Guid userId)
+        {
+            var communityUsers = _communityUserDal.GetAll(x => x.UserId == userId);
+
+            var communityDtos = communityUsers
+                .Select(cu =>
+                {
+                    var community = _communityDal.Get(c => c.Id == cu.CommunityId);
+                    if (community == null) return null;
+
+                    return new CommunityDto
+                    {
+                        CommunityId = community.Id,
+                        Image = community.Image,
+                        Name = community.Name,
+                        Description = community.Description
+                    };
+                })
+                .Where(dto => dto != null)
+                .ToList();
+
+            return communityDtos;
         }
 
         public int GetCommunityUserCount(Guid communityId)

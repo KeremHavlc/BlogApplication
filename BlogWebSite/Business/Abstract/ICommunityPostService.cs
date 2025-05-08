@@ -10,6 +10,6 @@ namespace Business.Abstract
         (bool success, string message) DeleteCommunityPost(Guid communityPostId);
         List<CommunityPostDto> GetPostByCommunity(Guid communityId);
         List<CommunityPostDto> GetPostByUser(Guid userId);
-
+        CommunityPostDto GetById(Guid postId);
     }
 }

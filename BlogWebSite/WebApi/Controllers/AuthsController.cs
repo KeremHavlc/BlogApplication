@@ -1,7 +1,9 @@
 ﻿using Business.Abstract;
 using Core.Dtos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -10,9 +12,13 @@ namespace WebApi.Controllers
     public class AuthsController : ControllerBase
     {
         private readonly IAuthService _authService;
-        public AuthsController(IAuthService authService)
+        private readonly IUserService _userService;
+
+        public AuthsController(IAuthService authService,IUserService userService)
         {
             _authService = authService;
+            _userService = userService;
+
         }
 
         [HttpPost("register")]
@@ -35,12 +41,17 @@ namespace WebApi.Controllers
             {
                 return Unauthorized(new {message = "Kullanıcı Adı veya Şifre Hatalı!" });
             }
-
+            var user = _userService.GetByUsername(loginDto.Username);
+            if (user.RoleId != Guid.Parse("3fa85f64-5717-4562-b3fc-2c963f66afa6"))
+            {
+                return Unauthorized(new { message = "Sadece  kullanıcı girişi yapabilir!" });
+            }
             Response.Cookies.Append("authToken", result.AccessToken, new CookieOptions
             {
-                HttpOnly = false, //javascriptle erişilebilir
-                Secure = true, //Https varsa true , http de false 
-                SameSite = SameSiteMode.None
+                HttpOnly = true,
+                Secure = true, 
+                SameSite = SameSiteMode.Strict,
+                Expires = DateTimeOffset.UtcNow.AddDays(7)
             });
             return Ok(new { message = "Giriş Başarılı!" });
         }
@@ -52,12 +63,19 @@ namespace WebApi.Controllers
             {
                 Response.Cookies.Append("authToken", "", new CookieOptions
                 {
-                    HttpOnly = false,
+                    HttpOnly = true,
                     Secure = true,
-                    SameSite = SameSiteMode.None
+                    SameSite = SameSiteMode.Strict,
+                    Expires = DateTimeOffset.UtcNow.AddDays(-1)
                 });
             }
             return Ok(new { message = "Çıkış Başarılı!" });
+        }
+        [HttpGet("me")]
+        public IActionResult Me()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            return Ok(new { id = userId });
         }
     }
 }

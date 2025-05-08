@@ -56,6 +56,28 @@ namespace Business.Concrete
             return (true, "Topluluk Gönderisi Başarıyla Silindi!");
         }
 
+        public CommunityPostDto GetById(Guid postId)
+        {
+            var post = _communityPostDal.Get(x => x.Id == postId);
+            if (post == null)
+            {
+                return null;
+            }
+
+            var communityPostDto = new CommunityPostDto
+            {
+
+                PostId = post.Id,
+                Title = post.Title,
+                Description = post.Description,
+                CommunityId = post.CommunityId,
+                UserId = post.UserId,
+                CreatedAt = post.CreatedAt,
+            };
+
+            return communityPostDto;
+        }
+
         public List<CommunityPostDto> GetPostByCommunity(Guid communityId)
         {
             var communityPosts = _communityPostDal.GetAll(x => x.CommunityId == communityId);
@@ -65,6 +87,7 @@ namespace Business.Concrete
             }
             var listCommunityPost = communityPosts.Select(c => new CommunityPostDto
             {
+                PostId = c.Id,
                 Title = c.Title,
                 Description = c.Description,
                 CommunityId = c.CommunityId,

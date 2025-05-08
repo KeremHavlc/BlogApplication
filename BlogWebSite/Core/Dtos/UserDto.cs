@@ -7,5 +7,6 @@
         public string Password { get; set; }
         public Guid? RoleId { get; set; }
         public Guid? UserId { get; set; }
+        public DateTime CreatedAt { get; set; }
     }
 }

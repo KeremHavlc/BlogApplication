@@ -11,14 +11,35 @@ namespace DataAccess.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<byte[]>(
+            // 1. Geçici kolon oluştur
+            migrationBuilder.AddColumn<byte[]>(
+                name: "Image_temp",
+                table: "Posts",
+                type: "varbinary(max)",
+                nullable: true);
+
+            // 2. Eğer string base64 data varsa, SQL'de bunu dönüştürmek zordur.
+            // Manuel bir UPDATE yapılması gerekebilir, genelde dışarıdan (EF dışı)
+
+            // 3. Eski kolonu sil
+            migrationBuilder.DropColumn(
+                name: "Image",
+                table: "Posts");
+
+            // 4. Yeniden ekle (doğru türle)
+            migrationBuilder.AddColumn<byte[]>(
                 name: "Image",
                 table: "Posts",
                 type: "varbinary(max)",
                 nullable: false,
-                oldClrType: typeof(string),
-                oldType: "nvarchar(max)");
+                defaultValue: new byte[0]);
 
+            // 5. Geçici kolonu sil
+            migrationBuilder.DropColumn(
+                name: "Image_temp",
+                table: "Posts");
+
+            // Comments tablosunu değiştirme kısmı aynı kalabilir
             migrationBuilder.AlterColumn<Guid>(
                 name: "UserId",
                 table: "Comments",
@@ -29,6 +50,7 @@ namespace DataAccess.Migrations
                 oldType: "uniqueidentifier",
                 oldNullable: true);
         }
+
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)

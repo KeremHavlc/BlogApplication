@@ -65,5 +65,11 @@ namespace WebApi.Controllers
             var result = _communityUserService.Check(communityId, joinUserId);
             return Ok(result);
         }
+        [HttpGet("getById")]
+        public IActionResult GetById(Guid userId)
+        {
+            var result = _communityUserService.GetCommunitiesByUserId(userId);
+            return Ok(result);
+        }
     }
 }

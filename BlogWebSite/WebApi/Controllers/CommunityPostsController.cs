@@ -63,5 +63,15 @@ namespace WebApi.Controllers
             }
             return NotFound("Bu kullanıcıya ait gönderi bulunmamaktadır!");
         }
+        [HttpGet("getById")]
+        public IActionResult GetById(Guid postId)
+        {
+            var result = _communityPostService.GetById(postId);
+            if (result != null)
+            {
+                return Ok(result);
+            }
+            return NotFound("Bu gönderi bulunmamaktadır!");
+        }
     }
 }

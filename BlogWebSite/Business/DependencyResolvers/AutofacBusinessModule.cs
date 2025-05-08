@@ -5,6 +5,7 @@ using Core.Utilities.Security.Jwt;
 using DataAccess.Abstract;
 using DataAccess.Concrete;
 using DataAccess.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace Business.DependencyResolvers
 {
@@ -46,6 +47,13 @@ namespace Business.DependencyResolvers
             builder.RegisterType<CommunityCommentManager>().As<ICommunityCommentService>();
 
             builder.RegisterType<CommunityUserManager>().As<ICommunityUserService>();
+            builder.Register(c =>
+            {
+                var optionsBuilder = new DbContextOptionsBuilder<AppDbContext>();
+                optionsBuilder.UseSqlServer("Server=xxx;Database=xxx;User Id=xxx;Password=xxx;Encrypt=True;"); // Azure bağlantı cümlesi buraya
+                return new AppDbContext(optionsBuilder.Options);
+            }).As<DbContext>().InstancePerLifetimeScope();
+
         }
     }
     

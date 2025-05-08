@@ -42,7 +42,8 @@ namespace Business.Concrete
                 Username = userDto.Username,
                 PasswordHash = passwordHash,
                 PasswordSalt = passwordSalt,
-                RoleId = assignedRoleId
+                RoleId = assignedRoleId,
+                CreatedAt = userDto.CreatedAt,
             };
 
             _userDal.Add(user);
@@ -72,7 +73,9 @@ namespace Business.Concrete
                 Email = user.Email,
                 Username = user.Username,
                 RoleId = user.RoleId,
-                UserId = user.Id
+                UserId = user.Id,
+                CreatedAt = user.CreatedAt,
+
             }).ToList();
             return listUser;
         }

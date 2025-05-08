@@ -1,7 +1,9 @@
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
 using Business.DependencyResolvers;
+using DataAccess.Context;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
 
@@ -15,6 +17,12 @@ builder.Services.AddOpenApi();
 builder.Services.AddSwaggerGen();
 
 
+// ConfigurationBuilder'ý kullanarak appsettings.json dosyasýný yükleyelim
+builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+
+// Burada DbContext ve diðer servisleri yapýlandýrmaya devam edebilirsin
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
@@ -45,12 +53,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder
-            .WithOrigins("http://localhost:5173") 
-            .AllowAnyMethod()
-            .AllowAnyHeader()
-            .AllowCredentials());
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins("https://blog-app-front-g4c03http-keremhavlcs-projects.vercel.app")
+              .AllowAnyHeader()
+              .AllowAnyMethod()
+              .AllowCredentials(); // Çerez için kritik
+    });
 });
 builder.Services.AddHttpContextAccessor();
 //Services Registration --AUTOFAC--
@@ -62,22 +71,29 @@ builder.Host.ConfigureContainer<ContainerBuilder>(builder =>
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.Migrate();
+}
+
+
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
 }
 
-app.UseCors("AllowAll");
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseAuthentication();
+app.UseCors("AllowFrontend"); // middleware sýrasýna dikkat
+
+app.UseAuthentication(); // bunu CORS'tan sonra koy
 app.UseAuthorization();
 
 app.UseHttpsRedirection();
 
-app.UseAuthorization();
 
 app.MapControllers();
 

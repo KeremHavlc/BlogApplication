@@ -5,10 +5,7 @@ namespace DataAccess.Context
 {
     public class AppDbContext : DbContext
     {
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseSqlServer("Server=DESKTOP-HEK9VG2;Database=BlogAppDb;Integrated Security=True;Trusted_Connection=True;TrustServerCertificate=True;");
-        }
+        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         public DbSet<User> Users { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Comment> Comments { get; set; }

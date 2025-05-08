@@ -10,6 +10,7 @@ namespace Business.Abstract
         List<CommunityUserDto> GetCommunityUsersByCommunityId(Guid communityId);
         Dictionary<Guid, int> GetAllCommunityUserCount();
         CommunityUsersCheckDto Check(Guid communityId, Guid joinUserId);
+        List<CommunityDto> GetCommunitiesByUserId(Guid userId);
 
     }
 }
