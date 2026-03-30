@@ -1,5 +1,12 @@
 # BlogApplication
-
+<p align="center">
+  <img src="https://img.shields.io/badge/.NET-9.0-512BD4?style=flat-square&logo=dotnet&logoColor=white" />
+  <img src="https://img.shields.io/badge/C%23-239120?style=flat-square&logo=c-sharp&logoColor=white" />
+  <img src="https://img.shields.io/badge/ASP.NET%20Core-5C2D91?style=flat-square&logo=asp.net&logoColor=white" />
+  <img src="https://img.shields.io/badge/SQL%20Server-CC2927?style=flat-square&logo=microsoft-sql-server&logoColor=white" />
+  <img src="https://img.shields.io/badge/JWT-000000?style=flat-square&logo=json-web-tokens&logoColor=white" />
+  <img src="https://img.shields.io/badge/Entity%20Framework%20Core-512BD4?style=flat-square&logo=entity-framework&logoColor=white" />
+</p>
 ## About the Project
 
 BlogApplication is a social blogging platform where users can not only create, update, and delete blog posts but also engage with others by joining communities, sending friend requests, liking posts, and commenting. Users can upload images to enrich their content and interact within public communities that are managed exclusively by administrators. The backend is developed in C# using a clean layered architecture, with Microsoft SQL Server for reliable data storage and JWT for secure user authentication.
